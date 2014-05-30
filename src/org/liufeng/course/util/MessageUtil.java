@@ -99,6 +99,14 @@ public class MessageUtil {
      */
     public static final String EVENT_TYPE_CLICK = "CLICK";
 
+    public static final String MESSAGE_HEADER_FROM_USER_NAME = "FromUserName";
+
+    public static final String MESSAGE_HEADER_TO_USER_NAME = "ToUserName";
+
+    public static final String MESSAGE_HEADER_MSG_TYPE = "MsgType";
+
+    public static final String MESSAGE_HEADER_EVENT = "Event";
+
     /**
      * 解析微信发来的请求（XML）
      *

@@ -26,11 +26,11 @@ public class CoreService {
             Map<String, String> requestMap = MessageUtil.parseXml(request);
 
             // 发送方帐号（open_id）
-            String fromUserName = requestMap.get("FromUserName");
+            String fromUserName = requestMap.get(MessageUtil.MESSAGE_HEADER_FROM_USER_NAME);
             // 公众帐号
-            String toUserName = requestMap.get("ToUserName");
+            String toUserName = requestMap.get(MessageUtil.MESSAGE_HEADER_TO_USER_NAME);
             // 消息类型
-            String msgType = requestMap.get("MsgType");
+            String msgType = requestMap.get(MessageUtil.MESSAGE_HEADER_MSG_TYPE);
 
             // 回复文本消息
             textMessage.setToUserName(fromUserName);
@@ -60,7 +60,7 @@ public class CoreService {
             // 事件推送
             else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_EVENT)) {
                 // 事件类型
-                String eventType = requestMap.get("Event");
+                String eventType = requestMap.get(MessageUtil.MESSAGE_HEADER_EVENT);
                 // 订阅
                 if (eventType.equals(MessageUtil.EVENT_TYPE_SUBSCRIBE)) {
 

@@ -107,6 +107,10 @@ public class MessageUtil {
 
     public static final String MESSAGE_HEADER_EVENT = "Event";
 
+    public static final String MESSAGE_HEADER_CONTENT = "Content";
+
+    public static final String MESSAGE_HEADER_EVENT_TYPE = "EventType";
+
     /**
      * 解析微信发来的请求（XML）
      *

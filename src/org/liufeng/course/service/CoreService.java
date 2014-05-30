@@ -2,12 +2,21 @@ package org.liufeng.course.service;
 
 import java.util.Map;
 import java.util.Date;
+import java.util.concurrent.ConcurrentHashMap;
+
+import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.liufeng.course.util.MessageUtil;
 import org.liufeng.course.message.resp.TextMessage;
+
+import org.shining100.project.db.UserTable;
+import org.shining100.project.db.UserRecord;
+
+import org.shining100.project.session.Session;
+import org.shining100.project.session.InsertPlantSession;
 
 /**
  * 核心服务类
@@ -40,22 +49,30 @@ public class CoreService {
             textMessage.setFuncFlag(0);
 
             if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_TEXT)) {
-
+                Session session = sessions.get(fromUserName);
+                do {
+                    if (null == session) {
+                        respContent = "亲，请先用菜单选择您的操作";
+                        break;
+                    }
+                    respContent = session.process(requestMap);
+                    if (session.isComplete()) sessions.remove(fromUserName);
+                } while (false);
             }
             else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_LOCATION)) {
-
+                respContent = "亲，我们暂时不支持地理信息消息哦";
             }
             else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_IMAGE)) {
-
+                respContent = "亲，我们暂时不支持图片消息哦";
             }
             else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_VIDEO)) {
-
+                respContent = "亲，我们暂时不支持视频消息哦";
             }
             else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_VOICE)) {
-
+                respContent = "亲，我们暂时不支持音频消息哦";
             }
             else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_LINK)) {
-
+                respContent = "亲，我们暂时不支持链接消息哦";
             }
             // 事件推送
             else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_EVENT)) {
@@ -63,15 +80,31 @@ public class CoreService {
                 String eventType = requestMap.get(MessageUtil.MESSAGE_HEADER_EVENT);
                 // 订阅
                 if (eventType.equals(MessageUtil.EVENT_TYPE_SUBSCRIBE)) {
-
+                    respContent = processSubscribe(fromUserName);
                 }
                 // 取消订阅
                 else if (eventType.equals(MessageUtil.EVENT_TYPE_UNSUBSCRIBE)) {
                     // 取消订阅后用户再收不到公众号发送的消息，因此不需要回复消息
+                    processUnSubscribe(fromUserName);
                 }
                 // 自定义菜单点击事件
                 else if (eventType.equals(MessageUtil.EVENT_TYPE_CLICK)) {
-
+                    if (sessions.containsKey(fromUserName))  sessions.remove(fromUserName);
+                    String eventKey = requestMap.get("EventKey");
+                    Session session;
+                    do {
+                        if (eventKey.equals("1")) session = new InsertPlantSession();
+                        else {
+                            respContent = "亲，腾讯发过来了未知的菜单项，请稍后再试";
+                            break;
+                        }
+                        if (null != sessions.putIfAbsent(fromUserName, session)) {
+                            respContent = "";
+                            break;
+                        }
+                        respContent = session.process(requestMap);
+                        if (session.isComplete()) sessions.remove(fromUserName);
+                    } while (false);
                 }
             }
         } catch (Exception e) {
@@ -82,4 +115,20 @@ public class CoreService {
         textMessage.setContent(respContent);
         return MessageUtil.textMessageToXml(textMessage);
     }
+
+    static String processSubscribe(String fromUserName) throws SQLException {
+        UserRecord record = new UserRecord();
+        record.setName(fromUserName);
+        record.setPassword(fromUserName);
+        UserTable table = new UserTable();
+        table.insert(record);
+        return "亲，欢迎您关注花草管家";
+    }
+
+    static void processUnSubscribe(String fromUserName) throws SQLException {
+        UserTable table = new UserTable();
+        table.delete(fromUserName);
+    }
+
+    static ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<String, Session>(4096);
 }

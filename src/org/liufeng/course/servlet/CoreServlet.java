@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.liufeng.course.util.SignUtil;
 import org.liufeng.course.service.CoreService;
 
+import org.shining100.project.db.ConnectionPool;
+
 
 /**
  * 核心请求处理类
@@ -23,7 +25,7 @@ public class CoreServlet extends HttpServlet {
     private static final long serialVersionUID = 4440739483644821986L;
 
     public void init(ServletConfig config) {
-
+        ConnectionPool.getInstance().init("127.0.0.1", 3306, "root", "123456");
     }
 
     public void destroy() {

@@ -32,7 +32,7 @@ public class InsertPlantSession implements Session {
         switch (state) {
             case INIT:
                 respContent = "亲，请输入你要添加的植物";
-                state = State.INIT;
+                state = State.PROCESS;
                 break;
             case PROCESS:
                 String msgType = requestMap.get(MessageUtil.MESSAGE_HEADER_MSG_TYPE);

@@ -6,7 +6,6 @@ import java.sql.SQLException;
 
 import org.liufeng.course.util.MessageUtil;
 
-import org.shining100.project.db.UserTable;
 import org.shining100.project.db.UserRecord;
 import org.shining100.project.db.UserPlantsTable;
 import org.shining100.project.db.UserPlantsRecord;
@@ -41,20 +40,26 @@ public class InsertPlantSession implements Session {
                     return respContent;
                 }
 
+                UserPlantsTable userPlantsTable = null;
                 try {
-                    UserTable userTable = new UserTable();
-                    UserRecord userRecord = userTable.getUser(requestMap.get(
+                    UserRecord userRecord = DbHelper.getUser(requestMap.get(
                             MessageUtil.MESSAGE_HEADER_FROM_USER_NAME));
                     UserPlantsRecord userPlantsRecord = new UserPlantsRecord();
                     userPlantsRecord.setUserId(userRecord.getId());
                     userPlantsRecord.setName(requestMap.get(MessageUtil.MESSAGE_HEADER_CONTENT));
-                    UserPlantsTable userPlantsTable = new UserPlantsTable();
+                    userPlantsTable = new UserPlantsTable();
                     userPlantsTable.insert(userPlantsRecord);
                     respContent = "亲，您的植物已经添加成功了";
                 }
                 catch (SQLException e) {
                     if (e.getSQLState().equals("45000")) respContent = "亲，您已经添加了该植物了哦";
                     else e.printStackTrace();
+                } finally {
+                    try {
+                        if (null != userPlantsTable) userPlantsTable.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 state = State.COMPLETE;

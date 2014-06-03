@@ -25,6 +25,7 @@ public class InsertPlantSessionTest {
         record.setPassword("password");
         table.delete(record.getName());
         table.insert(record);
+        table.close();
 
         Map<String, String> requestMap = new HashMap<String, String>();
         requestMap.put(MessageUtil.MESSAGE_HEADER_MSG_TYPE, MessageUtil.REQ_MESSAGE_TYPE_TEXT);

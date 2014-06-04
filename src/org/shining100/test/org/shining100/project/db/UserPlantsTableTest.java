@@ -6,9 +6,8 @@ import java.sql.SQLException;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
 import static org.junit.Assert.*;
+import org.junit.rules.ExpectedException;
 import static org.hamcrest.CoreMatchers.is;
 
 public class UserPlantsTableTest {
@@ -36,6 +35,7 @@ public class UserPlantsTableTest {
         LinkedList<UserPlantsRecord> userPlantsRecords = userPlantsTable.getPlants(
                 userPlantsRecord.getUserId());
         assertThat(userPlantsRecords.size(), is(1));
+        assertThat(userPlantsRecords.getFirst().getUserId(), is(userPlantsRecord.getUserId()));
         assertThat(userPlantsRecords.getFirst().getName(), is(userPlantsRecord.getName()));
         userPlantsTable.delete(userPlantsRecord.getUserId(),userPlantsRecord.getName());
         userPlantsRecords = userPlantsTable.getPlants(userPlantsRecord.getUserId());

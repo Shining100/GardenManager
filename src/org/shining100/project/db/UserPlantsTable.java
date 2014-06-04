@@ -45,6 +45,7 @@ public class UserPlantsTable {
         while (rs.next()) {
             UserPlantsRecord record = new UserPlantsRecord();
             record.setId(rs.getInt(1));
+            record.setUserId(userId);
             record.setPlantId(rs.getInt(2));
             record.setName(rs.getString(3));
             records.push(record);

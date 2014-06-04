@@ -37,7 +37,7 @@ public class UserPlantsTableTest {
         assertThat(userPlantsRecords.size(), is(1));
         assertThat(userPlantsRecords.getFirst().getUserId(), is(userPlantsRecord.getUserId()));
         assertThat(userPlantsRecords.getFirst().getName(), is(userPlantsRecord.getName()));
-        userPlantsTable.delete(userPlantsRecord.getUserId(),userPlantsRecord.getName());
+        userPlantsTable.delete(userPlantsRecord.getId());
         userPlantsRecords = userPlantsTable.getPlants(userPlantsRecord.getUserId());
         assertThat(userPlantsRecords.isEmpty(), is(true));
         userPlantsTable.close();

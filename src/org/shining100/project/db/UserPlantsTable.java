@@ -30,10 +30,9 @@ public class UserPlantsTable {
         insertStmt.executeUpdate();
     }
 
-    public void delete(int userId, String name) throws SQLException {
+    public void delete(int id) throws SQLException {
         if (null == deleteStmt) deleteStmt = conn.prepareStatement(deleteSql);
-        deleteStmt.setInt(1, userId);
-        deleteStmt.setString(2, name);
+        deleteStmt.setInt(1, id);
         deleteStmt.executeUpdate();
     }
 
@@ -56,7 +55,7 @@ public class UserPlantsTable {
     Connection conn;
     static final String insertSql = "insert into user_plants (user_id, plant_id, name) values(?, ?, ?)";
     PreparedStatement insertStmt;
-    static final String deleteSql = "delete from user_plants where user_id = ? and name = ?";
+    static final String deleteSql = "delete from user_plants where id = ?";
     PreparedStatement deleteStmt;
     static final String getPlantsSql = "select id, plant_id, name from user_plants where user_id = ?";
     PreparedStatement getPlantsStmt;

@@ -17,6 +17,8 @@ import org.shining100.project.db.UserRecord;
 
 import org.shining100.project.session.Session;
 import org.shining100.project.session.InsertPlantSession;
+import org.shining100.project.session.QueryPlantsSession;
+import org.shining100.project.session.DeletePlantSession;
 
 /**
  * 核心服务类
@@ -94,6 +96,8 @@ public class CoreService {
                     Session session;
                     do {
                         if (eventKey.equals("1")) session = new InsertPlantSession();
+                        else if (eventKey.equals("12")) session = new QueryPlantsSession();
+                        else if (eventKey.equals("13")) session = new DeletePlantSession();
                         else {
                             respContent = "亲，腾讯发过来了未知的菜单项，请稍后再试";
                             break;

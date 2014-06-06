@@ -134,5 +134,5 @@ public class CoreService {
         table.delete(fromUserName);
     }
 
-    static ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<String, Session>(4096);
+    public static ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<String, Session>(4096);
 }

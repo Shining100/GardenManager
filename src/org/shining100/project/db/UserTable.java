@@ -18,6 +18,7 @@ public class UserTable {
     public void close() throws SQLException {
         if (null != insertStmt) insertStmt.close();
         if (null != deleteStmt) deleteStmt.close();
+        if (null != deleteAllStmt) deleteAllStmt.close();
         if (null != getUsersStmt) getUsersStmt.close();
         if (null != getUserStmt) getUserStmt.close();
         conn.close();
@@ -34,6 +35,11 @@ public class UserTable {
         if (null == deleteStmt) deleteStmt = conn.prepareStatement(deleteSql);
         deleteStmt.setString(1, name);
         deleteStmt.executeUpdate();
+    }
+
+    public void delete() throws SQLException {
+        if (null == deleteAllStmt) deleteAllStmt = conn.prepareStatement(deleteAllSql);
+        deleteAllStmt.executeUpdate();
     }
 
     public LinkedList<UserRecord> getUsers() throws SQLException {
@@ -69,6 +75,8 @@ public class UserTable {
     PreparedStatement insertStmt;
     static final String deleteSql = "delete from user where name = ?";
     PreparedStatement deleteStmt;
+    static final String deleteAllSql = "delete from user";
+    PreparedStatement deleteAllStmt;
     static final String getUsersSql = "select * from user";
     PreparedStatement getUsersStmt;
     static final String getUserSql = "select * from user where name = ?";

@@ -12,6 +12,7 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import org.liufeng.course.message.req.EventMessage;
 import org.liufeng.course.message.req.ImageMessage;
 import org.liufeng.course.message.req.MenuMessage;
 import org.liufeng.course.message.req.LocationMessage;
@@ -158,6 +159,11 @@ public class MessageUtil {
     public static String textMessageToXml(org.liufeng.course.message.req.TextMessage textMessage) {
         xstream.alias("xml", textMessage.getClass());
         return xstream.toXML(textMessage);
+    }
+
+    public static String evnetMessageToXml(EventMessage eventMessage) {
+        xstream.alias("xml", eventMessage.getClass());
+        return xstream.toXML(eventMessage);
     }
 
     /**
